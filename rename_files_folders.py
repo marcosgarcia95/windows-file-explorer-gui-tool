@@ -1,9 +1,10 @@
 import tkinter as tk
+from tkinter import *
 
-class RenameApp(tk.Frame):
-    def __init__(self, master):
-        super().__init__(master)
-        self.grid()
+class RenameApp():
+    def __init__(self):
+        super().__init__()
+        # self.grid()
 
         self.entrythingy = tk.Label(text="Welcome to the File/Folder Rename Application!",font= (0,17))
         self.entrythingy.grid(column=0, row=0)
@@ -24,9 +25,10 @@ class RenameApp(tk.Frame):
     #     print("Hi. The current entry content is:",
     #           self.contents.get())
 
-def rename_func():
-    root_app = tk.Tk()
-    RenameApp(root_app)
-    
-    rename_app = RenameApp(root_app)
-    rename_app.mainloop()
+def rename_func(frame):
+    # root = Tk() # first window
+    # top = Toplevel(root)
+    for widget in frame.winfo_children():
+        widget.destroy()
+    rename_app = RenameApp()
+    # rename_app.mainloop()
