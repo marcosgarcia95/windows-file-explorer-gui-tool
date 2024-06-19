@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import *
+from pathlib import Path
+import os
 
 class RenameApp():
     def __init__(self):
@@ -34,10 +36,12 @@ class RenameApp():
         self.endstring_input.grid(column = 1, row = 5)    
 
 
-        self.execute_button = tk.Button(text="Execute")
+        self.execute_button = tk.Button(text="Execute", command = lambda: get_path(self.enterpath.get(), 
+                                                                                   self.begstring_input.get(), 
+                                                                                   self.endstring_input.get()))
         self.execute_button.grid(column=0, row=6,columnspan=2)       
 
-        self.return_button = tk.Button(text="Return to main menu")
+        self.return_button = tk.Button(text="Return to main menu", command = '')
         self.return_button.grid(column=0,row=7, columnspan=2) 
 
         # Create the application variable.
@@ -63,3 +67,17 @@ def rename_func(frame):
         widget.destroy()
     rename_app = RenameApp()
     # rename_app.mainloop()
+
+
+
+def get_path(path, begstring, endstring):
+    win_path = fr'{path}'
+    print("Your Python Path: ", win_path)
+    for filename in os.listdir(win_path):
+        if not os.path.exists(filename):
+            print(filename)
+            print(path+'\\'+filename)
+            print(begstring, endstring)
+            os.rename(path+'\\'+filename, filename.replace(begstring, endstring))
+
+    # return win_path 
