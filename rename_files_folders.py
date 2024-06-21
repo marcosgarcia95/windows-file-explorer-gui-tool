@@ -2,16 +2,17 @@ import tkinter as tk
 from tkinter import *
 from pathlib import Path
 import os
+from tkinter import messagebox
 
 class RenameApp():
     def __init__(self):
         super().__init__()
         # self.grid()
 
-        self.introtext = tk.Label(text="Welcome to the File/Folder Rename Application!",font= (0,17))
+        self.introtext = tk.Label(text="Welcome to the File Rename Application!",font= (0,17))
         self.introtext.grid(column=0, row=0, columnspan=2)
 
-        self.subtext = tk.Label(text="Please enter the absoluite path of where you want to rename your files and folders")
+        self.subtext = tk.Label(text="Please enter the absoluite path of where you want to rename your files")
         self.subtext.grid(column= 0, row=1, columnspan=2)
 
         self.exampletext = tk.Label(text ="An example -  C:\\Users\\gama6p9\\Downloads")
@@ -35,14 +36,19 @@ class RenameApp():
         self.endstring_input = tk.Entry(width=50)
         self.endstring_input.grid(column = 1, row = 5)    
 
+        self.checkvarfilecheck = IntVar(value=1)
+        self.checkvarfoldercheck = IntVar(value=1)
 
-        self.execute_button = tk.Button(text="Execute", command = lambda: get_path(self.enterpath.get(), 
+        self.filecheck = tk.Checkbutton(text = 'Rename Files?',onvalue=1, offvalue=0, variable=self.checkvarfilecheck).grid(column=0,row=6)
+        self.foldercheck = tk.Checkbutton(text = 'Rename Folders?',onvalue=1, offvalue=0,variable=self.checkvarfoldercheck).grid(column=0,row=7)
+
+        self.execute_button = tk.Button(text="Execute", command = lambda: [get_path(self.enterpath.get(), 
                                                                                    self.begstring_input.get(), 
-                                                                                   self.endstring_input.get()))
-        self.execute_button.grid(column=0, row=6,columnspan=2)       
+                                                                                   self.endstring_input.get()),])
+        self.execute_button.grid(column=0, row=8,columnspan=2)       
 
         self.return_button = tk.Button(text="Return to main menu", command = '')
-        self.return_button.grid(column=0,row=7, columnspan=2) 
+        self.return_button.grid(column=0,row=9, columnspan=2) 
 
         # Create the application variable.
         # self.contents = tk.StringVar()
@@ -58,7 +64,7 @@ class RenameApp():
 
     # def print_contents(self, event):
     #     print("Hi. The current entry content is:",
-    #           self.contents.get())
+    #           self.contents.get()))
 
 def rename_func(frame):
     # root = Tk() # first window
@@ -73,11 +79,18 @@ def rename_func(frame):
 def get_path(path, begstring, endstring):
     win_path = fr'{path}'
     print("Your Python Path: ", win_path)
-    for filename in os.listdir(win_path):
-        if not os.path.exists(filename):
-            print(filename)
-            print(path+'\\'+filename)
-            print(begstring, endstring)
-            os.rename(path+'\\'+filename, filename.replace(begstring, endstring))
+    try:
+        for filename in os.listdir(win_path):
+            if not os.path.exists(filename):
+            
+                print(filename)
+                print(path+'\\'+filename)
+                print(begstring, endstring)
+                os.rename(path+'\\'+filename, path+'\\'+filename.replace(begstring, endstring))
+        popup_msg_success()
+    except:
+                messagebox.showinfo(title="Error!", message = 'There was an error renaming your files!')
+def popup_msg_success():
+    messagebox.showinfo(title="Success!",message = 'The files were renamed with no issues!')
 
     # return win_path 
