@@ -44,7 +44,9 @@ class RenameApp():
 
         self.execute_button = tk.Button(text="Execute", command = lambda: [get_path(self.enterpath.get(), 
                                                                                    self.begstring_input.get(), 
-                                                                                   self.endstring_input.get()),])
+                                                                                   self.endstring_input.get(),
+                                                                                   self.checkvarfilecheck.get(),
+                                                                                   self.checkvarfoldercheck.get())])
         self.execute_button.grid(column=0, row=8,columnspan=2)       
 
         self.return_button = tk.Button(text="Return to main menu", command = '')
@@ -76,20 +78,37 @@ def rename_func(frame):
 
 
 
-def get_path(path, begstring, endstring):
+def get_path(path, begstring, endstring, file_check,folder_check):
     win_path = fr'{path}'
-    print("Your Python Path: ", win_path)
     try:
+        print(file_check,folder_check)
         for filename in os.listdir(win_path):
             if not os.path.exists(filename):
-            
-                print(filename)
-                print(path+'\\'+filename)
-                print(begstring, endstring)
-                os.rename(path+'\\'+filename, path+'\\'+filename.replace(begstring, endstring))
-        popup_msg_success()
+                if file_check ==1 and folder_check==1:
+                    print(filename)
+                    print(path+'\\'+filename)
+                    print(begstring, endstring)
+                    os.rename(path+'\\'+filename, path+'\\'+filename.replace(begstring, endstring))
+                elif file_check ==1 and folder_check==0:
+                    if os.path.isdir(path+'\\'+filename):
+                         pass
+                    else: 
+                        os.rename(path+'\\'+filename, path+'\\'+filename.replace(begstring, endstring))
+                elif file_check ==0 and folder_check ==1:
+                    if os.path.isdir(path+'\\'+filename):
+                        os.rename(path+'\\'+filename, path+'\\'+filename.replace(begstring, endstring))
+                    else: 
+                        pass
+                else:
+                    pass
+        if file_check==1 or folder_check==1:
+            popup_msg_success()
+        else: 
+            messagebox.showinfo(title="Did not run!", message = 'The script could not run. Please check one of the two boxes to replace a file or folder!')
     except:
                 messagebox.showinfo(title="Error!", message = 'There was an error renaming your files!')
+
+
 def popup_msg_success():
     messagebox.showinfo(title="Success!",message = 'The files were renamed with no issues!')
 
